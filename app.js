@@ -27,19 +27,30 @@ app.listen(appEnv.port, '0.0.0.0', function() {
 	// print a message when the server starts listening
   console.log("server starting on " + appEnv.url);
 });
-var NaturalLanguageClassifierV1 = require('watson-developer-cloud/natural-language-classifier/v1');
 
-var natural_language_classifier = new NaturalLanguageClassifierV1({
+var fs = require('fs');
+var NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js');
+
+var nlu = new NaturalLanguageUnderstandingV1({
   username: '10c59733-c15c-47e0-91a9-d219b007c3c6',
-  password: 'dh62EHpVQWjv'
+  password: 'dh62EHpVQWjv',
+  version_date: NaturalLanguageUnderstandingV1.VERSION_DATE_2017_02_27
 });
 
-natural_language_classifier.classify({
-  text: 'Is it sunny?',
-  classifier_id: '<classifier-id>' },
-  function(err, response) {
-    if (err)
-      console.log('error:', err);
-    else
-      console.log(JSON.stringify(response, null, 2));
-});
+var  file_data = 'Testing NLU for RAFIW team project';
+nlu.analyze({
+  'html': file_data, // Buffer or String
+  'features': {
+    'concepts': {},
+    'keywords': {},
+		'emotion' : {},
+		'sentiment': {},
+  }
+}, function(err, response) {
+     if (err)
+       console.log('error:', err);
+     else
+		   console.log(file_data);
+       console.log(JSON.stringify(response, null, 3));
+
+ });
